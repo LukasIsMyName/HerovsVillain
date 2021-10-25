@@ -112,11 +112,12 @@ struct Villain : public GameObject
 /// Structure of weaponDamage using enum class to set initial damage
 /// </summary>
 struct weaponValues
-{
+{	//Constructor and destructor
 	weaponValues() {};
 	~weaponValues() {};
 	
 	std::string name = "";
+	std::string icon[9]; //String for ASCII art to represent style
 	int damage = 1;
 	int defence = 1;
 	int recoil = 1;
@@ -125,7 +126,35 @@ public:
 	//Function that sets the initial values to weapons/shields
 	void chooseWeapon(int t_value)
 	{
-		
+		if (t_value == 1) //If it's melee, set icon as sword
+		{
+			icon[0] = "                      O\n";
+			icon[1] = "	   	      {____________________________________\n";
+			icon[2] = "	@XXXXXXXXXXXXXX___________________________________.>\n";
+			icon[3] = "	              {\n";
+			icon[4] = "                      O\n";		
+		}
+		if (t_value == 2)//If it's stab, set icon as a rapier
+		{
+			icon[0] = "       |\n";
+			icon[1] = "       /~\\\n";
+			icon[2] = "Oxxxxx|  (|=========================-\n";
+			icon[3] = " \\____/\\_/\n";
+			icon[4] = "       |\n";
+		}
+		if (t_value == 3)//If it's a block, set icon as a shield
+		{
+			icon[0] = "|`-._/\\_.-`|\n";
+			icon[1] = "|    ||    |\n";
+			icon[2] = "|___o()o___|\n";
+			icon[3] = "|__((<>))__|\n";
+			icon[4] = "\\   o\\/o   /\n";
+			icon[5] = " \\   ||   /\n"; 
+			icon[6] = "  \\  ||  /\n";
+			icon[7] = "   '.||.'\n";
+			icon[8] = "     ``\n";
+		}
+		//Randomizer seed
 		std::srand(static_cast<unsigned>(time(nullptr)));
 		if (t_value == 1)
 		{

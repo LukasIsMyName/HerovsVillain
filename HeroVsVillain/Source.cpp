@@ -13,7 +13,7 @@ void Game::run()
 {
 	//Local variable for input
 	int x = 0;
-	std::cout << "                 - - - - - - - - - - - - - - - Hero versus Villain - - - - - - - - - - - - - - -\n\n";
+	std::cout << "                 ====)------------- Hero versus Villain -------------(====\n\n";
 	std::cout << "'The heroes name is " + player->name + "'\n";
 	std::cout << "'The villains name is " + villain->name + "'\n";
 	std::cout << "'What do you wish to do?'\n";
@@ -29,6 +29,27 @@ void Game::run()
 		} while (x > 3 || x < 1);//Loops until the statement is false
 	}
 	m_values->chooseWeapon(x); //Calls a function chooseWeapon and sends an argument x
+	if (x == 1) // If it's melee, print melee icon
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			std::cout << m_values->icon[i];
+		}
+	}
+	if (x == 2) // If it's melee, print melee icon
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			std::cout << m_values->icon[i];
+		}
+	}
+	if (x == 3)//If it's block, print shield icon
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			std::cout << m_values->icon[i];
+		}
+	}
 	std::cout << "\n-User has received a " + m_values->name + "\n";
 	std::cout << "-- Weapon stats --\n";
 	//#1 - Melee, #2 - Stab, #3 - Shield
