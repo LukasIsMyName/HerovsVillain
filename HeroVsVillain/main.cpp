@@ -4,7 +4,7 @@
 //Date: October 2021
 //
 //Estimated time: 7 man hours
-//Time taken: 7 hours at 21:23
+//Time taken: ~8.5 dude hours
 
 #include <iostream> // standard library
 #include "Source.h" // include the header file

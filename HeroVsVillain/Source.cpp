@@ -36,16 +36,24 @@ void Game::run()
 	std::cout << "//Damage: " + std::to_string(villain->getDamage()) << std::endl;
 	std::cout << "//Defence: " + std::to_string(villain->getDefence()) << std::endl;
 	story->halt();
-	while (player->getHealth() > 0 || villain->getHealth() > 0)
+	while (player->getHealth() > 0 || villain->getHealth() > 0)//Loop the turn based game until one of the characters dies
 	{
-		if (player->getHealth() <= 0)
+		if (player->getHealth() <= 0)//If you have died
 		{
 			std::cout << "\n\n  -- " + player->name + ", you have failed us, the danger of our kingdom was not stopped.\nMaybe you are not the chosen one..\n\n";
+			std::cout << "\n\n *You have lost...\n\n";
 			break;
 		}
-		if (villain->getHealth() <= 0)
+		if (villain->getHealth() <= 0)//If you killed villain
 		{
 			std::cout << "\n\n  -- " + player->name + ", you have proven yourself as a Stormblessed,\nyou are indeed, a chosen one..\n\n";
+			std::cout << "\n\n *You have won, congratulations!\n\n";
+			break;
+		}
+		if (player->getHealth() <= 0 && villain->getHealth() <= 0)//If draw
+		{
+			std::cout << "\n\n  -- " + player->name + " has fought till the end,\nhe made not just us,\nbut all Stormblessed proud..\n\n";
+			std::cout << "\n\n *You have won, congratulations!\n\n";
 			break;
 		}
 		std::cout << "'What do you wish to do?'\n";
@@ -90,12 +98,28 @@ void Game::run()
 		{
 			std::cout << "//Damage: " + std::to_string(m_values->damage) + "\n";
 			story->halt();
+			if (x == 1)
+			{
+				std::cout << player->name; story->narrator();
+				player->attack();
+				std::cout << "\n";
+			}
+			else
+			{
+				std::cout << player->name; story->narrator();
+				player->stab();
+				std::cout << "\n";
+			}
 			fight->damageDeduction(villain, player, m_values->damage, m_values->recoil, m_values->defence);
-			std::cout << "\n\n*Enemy has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
+			std::cout << "\n\n*" + villain->name + "has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
 			std::cout << "*" + player->name + " has " + std::to_string(player->getHealth()) + " hitpoints left*\n\n";
 		}
 		if (x == 3) //If it's a shield, print shield's values
 		{
+			std::cout << "\n";
+			std::cout << player->name; story->narrator();
+			player->shield();
+			std::cout << "\n";
 			std::cout << "//Defence: " + std::to_string(m_values->defence) + "\n";
 			std::cout << "//Recoil: " + std::to_string(m_values->recoil) + "\n";
 		}
@@ -135,12 +159,42 @@ void Game::run()
 		{
 			std::cout << "//Damage: " + std::to_string(m_values->damage) + "\n";
 			story->halt();
+			if (roll == 1)
+			{
+				std::cout << villain->name; story->narrator();
+				villain->attack();
+				std::cout << "\n";
+			}
+			else
+			{
+				std::cout << villain->name; story->narrator();
+				villain->stab();
+				std::cout << "\n";
+			}
 			fight->damageDeduction(player, villain, m_values->damage, m_values->recoil, m_values->defence);
-			std::cout << "\n\n*Enemy has " + std::to_string(player->getHealth()) + " hitpoints left*\n\n";
-			std::cout << "*" + villain->name + " has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
+			if (player->getHealth() <= 0 || villain->getHealth() <= 0)
+			{
+				if (player->getHealth() <= 0)
+				{
+					std::cout << "\n\n*Oh dear," + player->name + " has died..\n";
+				}
+				if (villain->getHealth() <= 0)
+				{
+					std::cout << "\n\n*Oh dear," + villain->name + " has died..\n";
+				}
+			}
+			else
+			{
+				std::cout << "\n\n*" + player->name + " has " + std::to_string(player->getHealth()) + " hitpoints left*\n\n";
+				std::cout << "*" + villain->name + " has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
+			}
 		}
 		if (roll == 3) //If it's a shield, print shield's values
 		{
+			std::cout << "\n";
+			std::cout << villain->name; story->narrator();
+			villain->shield();
+			std::cout << "\n";
 			std::cout << "//Defence: " + std::to_string(m_values->defence) + "\n";
 			std::cout << "//Recoil: " + std::to_string(m_values->recoil) + "\n";
 		}

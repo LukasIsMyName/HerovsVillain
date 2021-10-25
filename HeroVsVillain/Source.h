@@ -67,7 +67,7 @@ struct Hero : public GameObject
 	//Local data members
 	int health = 150;
 	int damage = 10;
-	int defence = 45;
+	int defence = 55;
 	std::string name = "Kaladin";
 };
 
@@ -95,7 +95,7 @@ struct Villain : public GameObject
 
 	//Villain local data members
 	int health = 175;
-	int damage = 6;
+	int damage = 4;
 	int defence = 65;
 	std::string name = "Taravangian";
 };
@@ -231,17 +231,17 @@ public:
 			case 1:
 				name = "Berserker Shield\n";
 				recoil = 7;
-				defence = 15;
+				defence = 12;
 				break;
 			case 2:
 				name = "Dragonfire Shield\n";
-				recoil = 12;
+				recoil = 5;
 				defence = 20;
 				break;
 			case 3:
 				name = "Recoil Shield\n";
-				recoil = 15;
-				defence = 10;
+				recoil = 20;
+				defence = 7;
 				break;
 			default:
 				break;
@@ -283,13 +283,11 @@ struct lore
 	~lore() {};
 	std::string welcome = "  - Welcome aboard player, you have been chosen to represent the Stormblesseds,\nyour goal is to defeat the villain and defend the kingdom!\n Are you up for the challenge?\n";
 public:
-	void theBeginning()
-	{
-	}
 	//Function that halts the processes in the game for more aesthetic look in the console
 	void halt() { std::cout << "\n*Press <ENTER> to continue*\n"; std::cin.ignore(); }
-	void attackConfirm() { std::cout << "\n*Press <ENTER> to attack the enemy*\n\n"; std::cin.ignore(); }
-	void narrator() { std::cout << " says:\n"; } 
+	void narrator() { std::cout << " says:\n"; } //For using functions as say(), attack() and such that outputs a text
+
+
 };
 
 
