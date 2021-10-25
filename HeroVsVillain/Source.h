@@ -21,6 +21,7 @@ public:
 	virtual void attack() = 0;
 	virtual void stab() = 0;
 	virtual void shield() = 0;
+	virtual void say() = 0;
 	//Set/get functions
 	virtual void setHealth(int t_health) { health = t_health; } //Sets the initial health
 	virtual void setDamage(int t_damage) { damage = t_damage; } //Sets the initial damage
@@ -56,10 +57,13 @@ struct Hero : public GameObject
 	~Hero()
 	{};
 
+	//Heroes public functions
 	void attack() { std::cout << "- Taste the fiery of my weapon!\n"; }
 	void stab() { std::cout << "- Try avoiding this!\n"; }
 	void shield() { std::cout << "- You don't stand a chance against my mighty shield.\n"; }
+	void say() { std::cout << " - Kingdoms enemy, is my enemy.\nI shall obliterate everyone\nwho is in the way of the Kingdom.\n"; }
 
+	//Local data members
 	int health = 150;
 	int damage = 10;
 	int defence = 45;
@@ -82,11 +86,13 @@ struct Villain : public GameObject
 	//Default destructor
 	~Villain()
 	{};
+	//Villain public functions
+	void attack() { std::cout << " - You shall know darkness, by tasting my sword!\n"; }
+	void stab() { std::cout << " - Do you bleed?\n"; }
+	void shield() { std::cout << " - Fool, you are too weak to penetrate my shield\n"; }
+	void say() { std::cout << " - Stormblessed or not, you don't stand a chance against me!\n"; }
 
-	void attack() { std::cout << "- Taste the fiery of my weapon!\n"; }
-	void stab() { std::cout << "- Try avoiding this!\n"; }
-	void shield() { std::cout << "- You don't stand a chance against my mighty shield.\n"; }
-
+	//Villain local data members
 	int health = 175;
 	int damage = 6;
 	int defence = 65;
@@ -101,6 +107,7 @@ struct weaponValues
 	weaponValues() {};
 	~weaponValues() {};
 	
+	//Local data members
 	std::string name = "";
 	std::string icon[9]; //String for ASCII art to represent style
 	int damage = 1;
@@ -183,6 +190,7 @@ public:
 		}
 		if (t_value == 2)
 		{
+			std::cout << "*User has chosen to attack*\n";
 			std::cout << "*User has chosen attack style: Stab*\n";
 			int random = (rand() % 5) + 1; // picks a random weapon from 1 to 5
 			//Adding damage values to daggers/stab weapons
@@ -242,6 +250,22 @@ public:
 };
 
 /// <summary>
+/// Structure responsible for battles, deduction of health
+/// </summary>
+struct battle
+{
+	//Default constructor and destructor
+	battle() {};
+	~battle() {};
+public:
+	void damageDeduction(GameObject* t_defender,GameObject* t_attacker, GameObject* t_defenderHealth, weaponValues* t_weaponDamage, GameObject* t_defenderDefence, weaponValues t_defenderRecoil)
+	{
+		int damageDealt = (t_weaponDamage->damage + t_attacker->getDamage()); 
+		t_defender->setHealth(damageDealt);
+	}
+};
+
+/// <summary>
 /// A structure build of lore that contains the story, conversations, etc
 /// </summary>
 struct lore
@@ -256,6 +280,8 @@ public:
 	}
 	//Function that halts the processes in the game for more aesthetic look in the console
 	void halt() { std::cout << "\n*Press <ENTER> to continue*\n"; std::cin.ignore(); }
+	void attackConfirm() { std::cout << "\n*Press <ENTER> to attack the enemy*\n"; std::cin.ignore(); }
+	void narrator() { std::cout << " says:\n"; } 
 };
 
 
