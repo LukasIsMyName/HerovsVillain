@@ -1,39 +1,16 @@
+//Name: Lukas Sumkauskas
+//ID: C00263149
+//
+//Date: 2021 October
+
 #pragma once
-//Enum class defining which number represents which weapon in the class Melee
+
 
 #include <random> // srand
 #include <iostream> // standard library
 #include <string> // string
 #include <time.h> // std::time
 
-enum class Melee
-{
-	Broadsword,
-	Longsword,
-	Katana,
-	Mace,
-	Scimitar,
-	twoHandedSword,
-	Whip
-};
-
-//Enum class defining which number represents which weapon in the class Stab
-enum class Stab
-{
-	Dagger,
-	Knife,
-	Needle,
-	Rapier,
-	Spear
-};
-
-//Enum class defining which number represents which shiled in the class Shield
-enum class Shield
-{
-	BerserkerShield,
-	DragonFireShield,
-	RecoilShield
-};
 
 
 struct GameObject
@@ -45,15 +22,19 @@ public:
 	virtual void stab() = 0;
 	virtual void shield() = 0;
 	//Set/get functions
-	virtual void setHealth(int t_health) { health = t_health; } //Sets health
-	virtual void setDamage(int t_damage) { damage += t_damage; } //Adds damage of the weapon to the initial objects' damage
-	virtual void setName(std::string t_name) { name = t_name; } //Changes the name depending on which character has been chosen
-	virtual int getHealth() { return health; }; //Retrieves health
+	virtual void setHealth(int t_health) { health = t_health; } //Sets the initial health
+	virtual void setDamage(int t_damage) { damage = t_damage; } //Sets the initial damage
+	virtual void setDefence(int t_defence) { defence = t_defence; } //Sets the initial defence
+	virtual void setName(std::string t_name) { name = t_name; } //Function that sets a name by passing an argument
+	virtual int getHealth() { return health; } //Retrieves health
+	virtual int getDamage() { return damage; } //Retrieves damage
+	virtual int getDefence() { return defence; } //Retrieves defence
 
 
 	//Data variables
 	int health = 0;
 	int damage = 0;
+	int defence = 0;
 	std::string name = "";
 
 };
@@ -69,6 +50,7 @@ struct Hero : public GameObject
 		setHealth(health);
 		setDamage(damage);
 		setName(name);
+		setDefence(defence);
 	};
 	//Default destructor
 	~Hero()
@@ -80,6 +62,7 @@ struct Hero : public GameObject
 
 	int health = 150;
 	int damage = 10;
+	int defence = 45;
 	std::string name = "Kaladin";
 };
 
@@ -94,6 +77,7 @@ struct Villain : public GameObject
 		setHealth(health);
 		setDamage(damage);
 		setName(name);
+		setDefence(defence);
 	};
 	//Default destructor
 	~Villain()
@@ -105,6 +89,7 @@ struct Villain : public GameObject
 
 	int health = 175;
 	int damage = 6;
+	int defence = 65;
 	std::string name = "Taravangian";
 };
 
@@ -256,6 +241,23 @@ public:
 	};
 };
 
+/// <summary>
+/// A structure build of lore that contains the story, conversations, etc
+/// </summary>
+struct lore
+{
+	//Constructor and destructor
+	lore() {};
+	~lore() {};
+	std::string welcome = "  - Welcome aboard player, you have been chosen to represent the Stormblesseds,\nyour goal is to defeat the villain and defend the kingdom!\n Are you up for the challenge?\n";
+public:
+	void theBeginning()
+	{
+	}
+	//Function that halts the processes in the game for more aesthetic look in the console
+	void halt() { std::cout << "\n*Press <ENTER> to continue*\n"; std::cin.ignore(); }
+};
+
 
 /// <summary>
 /// Game class containing run function for the loop and GameObject structure instance pointers
@@ -263,9 +265,10 @@ public:
 class Game
 {
 	//Pointers of the objects
-	GameObject* player = new Hero();
-	GameObject* villain = new Villain();
-	weaponValues* m_values = new weaponValues(); //Values of the weapons
+	GameObject* player = new Hero(); //Gameobject pointer which points to the hero
+	GameObject* villain = new Villain(); //Gameobject pointer which points to the villain
+	weaponValues* m_values = new weaponValues(); //Points to the values of the weapons
+	lore* story = new lore(); //Lore object pointer
 	//Function to run the game loop
 public:
 	void run();

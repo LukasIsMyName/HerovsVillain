@@ -14,7 +14,15 @@ void Game::run()
 	//Local variable for input
 	int x = 0;
 	std::cout << "                 ====)------------- Hero versus Villain -------------(====\n\n";
-	std::cout << "'The heroes name is " + player->name + "'\n";
+	story->halt();
+	std::cout << story->welcome;
+	story->halt();
+	std::cout << "'You have been reincarnated as " + player->name + ", the Stormblessed'\n";
+	std::cout << "\n - - Base Stats - - \n";
+	std::cout << "\n//Health: " + std::to_string(player->getHealth()) << std::endl;
+	std::cout << "//Damage: " + std::to_string(player->getDamage()) << std::endl;
+	std::cout << "//Defence: " + std::to_string(player->getDefence()) << std::endl;
+	story->halt();
 	std::cout << "'The villains name is " + villain->name + "'\n";
 	std::cout << "'What do you wish to do?'\n";
 	std::cout << " -----------------------\n";
