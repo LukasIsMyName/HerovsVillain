@@ -24,6 +24,7 @@ public:
 	virtual void say() = 0;
 	//Set/get functions
 	virtual void setHealth(int t_health) { health = t_health; } //Sets the initial health
+	virtual void takeHealth(int t_multiplier) { health -= t_multiplier; }//Takes away from health using the argument
 	virtual void setDamage(int t_damage) { damage = t_damage; } //Sets the initial damage
 	virtual void setDefence(int t_defence) { defence = t_defence; } //Sets the initial defence
 	virtual void setName(std::string t_name) { name = t_name; } //Function that sets a name by passing an argument
@@ -257,11 +258,18 @@ struct battle
 	//Default constructor and destructor
 	battle() {};
 	~battle() {};
-public:
-	void damageDeduction(GameObject* t_defender,GameObject* t_attacker, GameObject* t_defenderHealth, weaponValues* t_weaponDamage, GameObject* t_defenderDefence, weaponValues t_defenderRecoil)
+public:  
+	void damageDeduction(GameObject* t_defender,GameObject* t_attacker, int t_weaponDamage, int t_defenderRecoil, int t_shieldDefence)
 	{
-		int damageDealt = (t_weaponDamage->damage + t_attacker->getDamage()); 
-		t_defender->setHealth(damageDealt);
+		//Complex formula to calculate the damage dealt depending on defenders defence
+		float damageDealt = (t_weaponDamage + t_attacker->getDamage())*(100.0/(100.0 + ((double)t_defender->defence + t_shieldDefence))); 
+		std::cout << "*" + t_defender->name + " took " + std::to_string((int)damageDealt) + " damage*\n";
+		t_defender->takeHealth((int)damageDealt);
+		if (t_defenderRecoil != 0)
+		{
+			t_attacker->takeHealth(t_defenderRecoil);
+			std::cout << "*" + t_attacker->name + " has taken " + std::to_string(t_defenderRecoil) + " damage due to the recoil of the shield*\n";
+		}
 	}
 };
 
@@ -280,7 +288,7 @@ public:
 	}
 	//Function that halts the processes in the game for more aesthetic look in the console
 	void halt() { std::cout << "\n*Press <ENTER> to continue*\n"; std::cin.ignore(); }
-	void attackConfirm() { std::cout << "\n*Press <ENTER> to attack the enemy*\n"; std::cin.ignore(); }
+	void attackConfirm() { std::cout << "\n*Press <ENTER> to attack the enemy*\n\n"; std::cin.ignore(); }
 	void narrator() { std::cout << " says:\n"; } 
 };
 
@@ -295,6 +303,7 @@ class Game
 	GameObject* villain = new Villain(); //Gameobject pointer which points to the villain
 	weaponValues* m_values = new weaponValues(); //Points to the values of the weapons
 	lore* story = new lore(); //Lore object pointer
+	battle* fight = new battle(); //Battle object pointer
 	//Function to run the game loop
 public:
 	void run();

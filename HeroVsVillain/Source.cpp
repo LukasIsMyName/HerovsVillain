@@ -11,6 +11,8 @@
 /// </summary>
 void Game::run()
 {
+	//Random seed for villain's roll
+	std::srand(static_cast<unsigned>(time(nullptr)));
 	//Local variable for input
 	int x = 0;
 	std::cout << "                 ====)------------- Hero versus Villain -------------(====\n\n";
@@ -34,53 +36,115 @@ void Game::run()
 	std::cout << "//Damage: " + std::to_string(villain->getDamage()) << std::endl;
 	std::cout << "//Defence: " + std::to_string(villain->getDefence()) << std::endl;
 	story->halt();
-	std::cout << "'What do you wish to do?'\n";
-	std::cout << " -----------------------\n";
-	std::cout << " #Enter 1 to use Melee\n #Enter 2 to use Stab\n #Enter 3 to block an Attack\n";
-	std::cin >> x;
-	if (x > 3 || x < 1) //Simple error checking if the values are in the range
+	while (player->getHealth() > 0 || villain->getHealth() > 0)
 	{
-		do 
+		if (player->getHealth() <= 0)
 		{
-			std::cout << "$Error, the number is out of range$\n-Please enter a valid value\n";
-			std::cin >> x;
-		} while (x > 3 || x < 1);//Loops until the statement is false
-	}
-	m_values->chooseWeapon(x); //Calls a function chooseWeapon and sends an argument x
-	if (x == 1) // If it's melee, print melee icon
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			std::cout << m_values->icon[i];
+			std::cout << "\n\n  -- " + player->name + ", you have failed us, the danger of our kingdom was not stopped.\nMaybe you are not the chosen one..\n\n";
+			break;
 		}
-	}
-	if (x == 2) // If it's stab, print stab icon
-	{
-		for (int i = 0; i < 5; i++)
+		if (villain->getHealth() <= 0)
 		{
-			std::cout << m_values->icon[i];
+			std::cout << "\n\n  -- " + player->name + ", you have proven yourself as a Stormblessed,\nyou are indeed, a chosen one..\n\n";
+			break;
 		}
-	}
-	if (x == 3)//If it's block, print shield icon
-	{
-		for (int i = 0; i < 9; i++)
+		std::cout << "'What do you wish to do?'\n";
+		std::cout << " -----------------------\n";
+		std::cout << " #Enter 1 to use Melee\n #Enter 2 to use Stab\n #Enter 3 to block an Attack\n";
+		std::cin >> x;
+		if (x > 3 || x < 1) //Simple error checking if the values are in the range
 		{
-			std::cout << m_values->icon[i];
+			do
+			{
+				std::cout << "$Error, the number is out of range$\n-Please enter a valid value\n";
+				std::cin >> x;
+			} while (x > 3 || x < 1);//Loops until the statement is false
 		}
-	}
-	std::cout << "\n-" + player->name + " has received a " + m_values->name + "\n";
-	std::cout << "-- Weapon stats --\n";
-	//#1 - Melee, #2 - Stab, #3 - Shield
-	if (x == 1 || x == 2) //If it's a weapon, print weapon values
-	{
-		std::cout << "//Damage: " + std::to_string(m_values->damage) + "\n";
-		story->attackConfirm();
-	}
-	if (x == 3) //If it's a shield, print shield's values
-	{
-		std::cout << "//Defence: " + std::to_string(m_values->defence) + "\n";
-		std::cout << "//Recoil: " + std::to_string(m_values->recoil) + "\n";
-		story->attackConfirm();
+		m_values->chooseWeapon(x); //Calls a function chooseWeapon and sends an argument x
+		if (x == 1) // If it's melee, print melee icon
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		if (x == 2) // If it's stab, print stab icon
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		if (x == 3)//If it's block, print shield icon
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		std::cout << "\n-" + player->name + " has received a " + m_values->name + "\n";
+		story->halt();
+		std::cout << "-- Weapon stats --\n";
+		//#1 - Melee, #2 - Stab, #3 - Shield
+		if (x == 1 || x == 2) //If it's a weapon, print weapon values
+		{
+			std::cout << "//Damage: " + std::to_string(m_values->damage) + "\n";
+			story->halt();
+			fight->damageDeduction(villain, player, m_values->damage, m_values->recoil, m_values->defence);
+			std::cout << "\n\n*Enemy has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
+			std::cout << "*" + player->name + " has " + std::to_string(player->getHealth()) + " hitpoints left*\n\n";
+		}
+		if (x == 3) //If it's a shield, print shield's values
+		{
+			std::cout << "//Defence: " + std::to_string(m_values->defence) + "\n";
+			std::cout << "//Recoil: " + std::to_string(m_values->recoil) + "\n";
+		}
+		story->halt();
+
+		//Villains turn
+		std::cout << "\n*" + villain->name + " is taking his turn*\n";
+		story->halt();
+		int roll = (rand() % 3) + 1;
+		m_values->chooseWeapon(roll); //Calls a function chooseWeapon and sends an argument roll
+		if (roll == 1) // If it's melee, print melee icon
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		if (roll == 2) // If it's stab, print stab icon
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		if (roll == 3)//If it's block, print shield icon
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				std::cout << m_values->icon[i];
+			}
+		}
+		std::cout << "\n-" + villain->name + " has received a " + m_values->name + "\n";
+		story->halt();
+		std::cout << "-- Weapon stats --\n";
+		//#1 - Melee, #2 - Stab, #3 - Shield
+		if (roll == 1 || roll == 2) //If it's a weapon, print weapon values
+		{
+			std::cout << "//Damage: " + std::to_string(m_values->damage) + "\n";
+			story->halt();
+			fight->damageDeduction(player, villain, m_values->damage, m_values->recoil, m_values->defence);
+			std::cout << "\n\n*Enemy has " + std::to_string(player->getHealth()) + " hitpoints left*\n\n";
+			std::cout << "*" + villain->name + " has " + std::to_string(villain->getHealth()) + " hitpoints left*\n\n";
+		}
+		if (roll == 3) //If it's a shield, print shield's values
+		{
+			std::cout << "//Defence: " + std::to_string(m_values->defence) + "\n";
+			std::cout << "//Recoil: " + std::to_string(m_values->recoil) + "\n";
+		}
+		story->halt();
 	}
 }
 
